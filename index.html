@@ -8,66 +8,57 @@
     <style>
         :root {
             --pamp-orange: #FF7F50;
-            --pamp-soft: #FFF5F2;
-            --text: #1d1d1f;
-            --glass: rgba(255, 255, 255, 0.8);
+            --pamp-dark: #1d1d1f;
+            --text: #333;
+            --bg: #f5f5f7;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'SF Pro Display', -apple-system, sans-serif; }
         
-        body { background: #f5f5f7; color: var(--text); min-height: 100vh; }
+        body { background: var(--bg); color: var(--text); min-height: 100vh; }
 
-        /* --- NAVBAR STYLE GOOGLE --- */
+        /* --- NAVBAR --- */
         .navbar {
-            height: 64px;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            border-bottom: 1px solid #e0e0e0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            height: 64px; background: white; display: flex; align-items: center; justify-content: space-between;
+            padding: 0 24px; border-bottom: 1px solid #e0e0e0; position: sticky; top: 0; z-index: 1000;
         }
+        .logo { font-size: 22px; font-weight: 800; color: var(--pamp-orange); text-decoration: none; display: flex; align-items: center; gap: 8px; }
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+        .apps-grid { cursor: pointer; padding: 8px; border-radius: 50%; display: flex; transition: 0.2s; }
+        .apps-grid:hover { background: #f0f0f0; }
 
-        .nav-left { display: flex; align-items: center; gap: 20px; }
-        .logo { font-size: 20px; font-weight: bold; color: var(--pamp-orange); text-decoration: none; display: flex; align-items: center; gap: 8px; }
-
-        .nav-right { display: flex; align-items: center; gap: 15px; }
-
-        /* Le menu d'apps type Google */
-        .apps-button { 
-            padding: 8px; border-radius: 50%; cursor: pointer; transition: 0.2s; 
-            display: flex; align-items: center; justify-content: center;
+        /* --- MAIN CONTENT --- */
+        main { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
+        
+        #progressContainer { 
+            display: none; background: var(--pamp-dark); color: white; padding: 20px; 
+            border-radius: 16px; margin-bottom: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
-        .apps-button:hover { background: #f0f0f0; }
+        .progress-bar { height: 6px; background: #444; border-radius: 3px; overflow: hidden; margin-top: 12px; }
+        .progress-fill { height: 100%; background: var(--pamp-orange); width: 0%; transition: width 0.1s linear; }
+        #speedInfo { font-family: monospace; font-size: 13px; color: #aaa; margin-top: 8px; display: block; }
 
-        /* --- CONTENT --- */
-        main { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
-
-        .header-section { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-
-        .btn-upload {
-            background: var(--pamp-orange); color: white; border: none; padding: 12px 24px;
-            border-radius: 25px; font-weight: 600; cursor: pointer; transition: 0.3s;
+        .header-section { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+        .btn-upload { 
+            background: var(--pamp-orange); color: white; border: none; padding: 12px 28px; 
+            border-radius: 30px; font-weight: 600; cursor: pointer; transition: 0.3s;
         }
+        .btn-upload:hover { transform: scale(1.03); opacity: 0.9; }
 
-        /* --- GRID --- */
-        .file-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
-        .file-card { background: white; padding: 20px; border-radius: 12px; text-align: center; border: 1px solid #e0e0e0; transition: 0.2s; }
-        .file-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        /* --- FILE GRID --- */
+        .file-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
+        .file-card { 
+            background: white; padding: 24px; border-radius: 18px; text-align: center; 
+            border: 1px solid #eee; transition: 0.3s;
+        }
+        .file-card:hover { transform: translateY(-5px); box-shadow: 0 12px 24px rgba(0,0,0,0.05); }
+        .file-icon { color: var(--pamp-orange); margin-bottom: 15px; }
 
-        /* --- PROGRESS BAR --- */
-        #progressContainer { display: none; background: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid var(--pamp-orange); }
-        .progress-bar { height: 8px; background: #eee; border-radius: 4px; overflow: hidden; margin-top: 10px; }
-        .progress-fill { height: 100%; background: var(--pamp-orange); width: 0%; transition: 0.3s; }
-
-        /* --- MODAL AUTH --- */
-        .auth-overlay { position: fixed; inset: 0; background: white; z-index: 2000; display: flex; align-items: center; justify-content: center; }
-        .auth-card { width: 100%; max-width: 400px; padding: 40px; text-align: center; }
-        .auth-card input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; }
-        .auth-card button { width: 100%; padding: 12px; background: var(--pamp-orange); color: white; border: none; border-radius: 8px; margin-top: 10px; cursor: pointer; font-weight: bold; }
+        /* --- AUTH SCREEN --- */
+        .auth-overlay { position: fixed; inset: 0; background: white; z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .auth-card { width: 100%; max-width: 380px; text-align: center; }
+        .auth-card input { width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #ddd; border-radius: 12px; font-size: 16px; }
+        .auth-card button { width: 100%; padding: 14px; background: var(--pamp-orange); color: white; border: none; border-radius: 12px; margin-top: 15px; cursor: pointer; font-weight: 700; font-size: 16px; }
         
         .hidden { display: none !important; }
     </style>
@@ -76,35 +67,37 @@
 
     <div id="authScreen" class="auth-overlay">
         <div class="auth-card">
-            <h1 style="color: var(--pamp-orange); margin-bottom: 10px;">🍊 Pamplemouche ID</h1>
-            <p id="authTitle">Connectez-vous pour accéder à Réserve</p>
-            <input type="email" id="email" placeholder="Email">
+            <h1 style="color: var(--pamp-orange); font-size: 32px; margin-bottom: 10px;">Pamplemouche</h1>
+            <p id="authTitle" style="color: #666; margin-bottom: 20px;">Accédez à votre Réserve</p>
+            <input type="email" id="email" placeholder="Adresse e-mail">
             <input type="password" id="password" placeholder="Mot de passe">
-            <button id="btnPrimary">Se connecter</button>
-            <p id="toggleAuth" style="margin-top: 20px; font-size: 14px; color: #666; cursor: pointer;">Pas de compte ? Créer un identifiant</p>
+            <button id="btnPrimary">Continuer</button>
+            <p id="toggleAuth" style="margin-top: 25px; font-size: 14px; color: var(--pamp-orange); cursor: pointer; font-weight: 600;">Créer un compte</p>
         </div>
     </div>
 
     <nav class="navbar">
-        <div class="nav-left">
-            <a href="#" class="logo"><span>🍊</span> Pamplemouche</a>
-        </div>
+        <a href="#" class="logo">🍊 Pamplemouche</a>
         <div class="nav-right">
-            <div class="apps-button" title="Applications Pamplemouche"><i data-lucide="layout-grid"></i></div>
-            <div id="userEmail" style="font-size: 14px; font-weight: 500;"></div>
-            <button id="btnLogout" style="background: none; border: none; cursor: pointer;"><i data-lucide="log-out"></i></button>
+            <div class="apps-grid"><i data-lucide="layout-grid"></i></div>
+            <span id="userDisplay" style="font-size: 14px; font-weight: 500;"></span>
+            <button id="btnLogout" style="background: none; border: none; cursor: pointer; color: #ff4444;"><i data-lucide="log-out"></i></button>
         </div>
     </nav>
 
     <main>
         <div id="progressContainer">
-            <span id="fileName">Téléchargement...</span>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span id="fileName" style="font-weight: 600;">Transfert en cours...</span>
+                <span id="percentText">0%</span>
+            </div>
             <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
+            <span id="speedInfo">Calcul de la vitesse...</span>
         </div>
 
         <div class="header-section">
-            <h2>Ma Réserve</h2>
-            <button class="btn-upload" onclick="document.getElementById('fileInput').click()">+ Nouveau</button>
+            <h2 style="font-size: 28px;">Ma Réserve</h2>
+            <button class="btn-upload" onclick="document.getElementById('fileInput').click()">+ Ajouter</button>
             <input type="file" id="fileInput" class="hidden">
         </div>
 
@@ -115,9 +108,8 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+        import { getStorage, ref, uploadBytesResumable, getDownloadURL, listAll } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
-        // Ta config
         const firebaseConfig = {
             apiKey: "AIzaSyAMTNzDvix3Q4WSrqETufyEfTTjzU5sHGo",
             authDomain: "pamplemouche-ecosyst.firebaseapp.com",
@@ -134,72 +126,94 @@
 
         let isLoginMode = true;
 
-        // --- AUTH LOGIQUE ---
+        // --- AUTHENTIFICATION ---
         const authScreen = document.getElementById('authScreen');
         const btnPrimary = document.getElementById('btnPrimary');
         const toggleAuth = document.getElementById('toggleAuth');
 
         toggleAuth.onclick = () => {
             isLoginMode = !isLoginMode;
-            btnPrimary.innerText = isLoginMode ? "Se connecter" : "Créer mon compte";
-            document.getElementById('authTitle').innerText = isLoginMode ? "Connectez-vous pour accéder à Réserve" : "Créez votre Pamplemouche ID";
-            toggleAuth.innerText = isLoginMode ? "Pas de compte ? Créer un identifiant" : "Déjà un compte ? Se connecter";
+            btnPrimary.innerText = isLoginMode ? "Continuer" : "S'inscrire";
+            toggleAuth.innerText = isLoginMode ? "Créer un compte" : "J'ai déjà un compte";
         };
 
         btnPrimary.onclick = () => {
             const email = document.getElementById('email').value;
             const pass = document.getElementById('password').value;
             if (isLoginMode) {
-                signInWithEmailAndPassword(auth, email, pass).catch(err => alert(err.message));
+                signInWithEmailAndPassword(auth, email, pass).catch(err => alert("Erreur: " + err.message));
             } else {
-                createUserWithEmailAndPassword(auth, email, pass).then(() => alert("Compte créé !")).catch(err => alert(err.message));
+                createUserWithEmailAndPassword(auth, email, pass).catch(err => alert("Erreur: " + err.message));
             }
         };
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 authScreen.classList.add('hidden');
-                document.getElementById('userEmail').innerText = user.email;
+                document.getElementById('userDisplay').innerText = user.email;
+                loadUserFiles(user.uid);
             } else {
                 authScreen.classList.remove('hidden');
+                document.getElementById('fileGrid').innerHTML = "";
             }
         });
 
         document.getElementById('btnLogout').onclick = () => signOut(auth);
 
-        // --- STORAGE LOGIQUE ---
+        // --- GESTION DES FICHIERS ---
         const fileInput = document.getElementById('fileInput');
+        let startTime, lastBytes;
+
         fileInput.onchange = (e) => {
             const file = e.target.files[0];
             if (!file) return;
 
-            const sRef = ref(storage, `users/${auth.currentUser.uid}/${file.name}`);
-            const uploadTask = uploadBytesResumable(sRef, file);
+            const fileRef = ref(storage, `users/${auth.currentUser.uid}/${file.name}`);
+            const uploadTask = uploadBytesResumable(fileRef, file);
 
             document.getElementById('progressContainer').style.display = 'block';
             document.getElementById('fileName').innerText = file.name;
+            startTime = Date.now();
 
             uploadTask.on('state_changed', 
                 (snap) => {
-                    const p = (snap.bytesTransferred / snap.totalBytes) * 100;
-                    document.getElementById('progressFill').style.width = p + '%';
+                    const progress = (snap.bytesTransferred / snap.totalBytes) * 100;
+                    document.getElementById('progressFill').style.width = progress + '%';
+                    document.getElementById('percentText').innerText = Math.round(progress) + '%';
+
+                    const timeElapsed = (Date.now() - startTime) / 1000;
+                    if (timeElapsed > 0) {
+                        const speed = (snap.bytesTransferred / (1024 * 1024) / timeElapsed).toFixed(2);
+                        document.getElementById('speedInfo').innerText = `Vitesse : ${speed} Mo/s — ${ (snap.bytesTransferred / 1024 / 1024).toFixed(1) } Mo sur ${ (snap.totalBytes / 1024 / 1024).toFixed(1) } Mo`;
+                    }
                 },
                 (err) => alert(err.message),
                 () => {
                     getDownloadURL(uploadTask.snapshot.ref).then(url => {
-                        addFileToUI(file.name, url);
+                        addFileCard(file.name, url);
                         document.getElementById('progressContainer').style.display = 'none';
                     });
                 }
             );
         };
 
-        function addFileToUI(name, url) {
+        async function loadUserFiles(uid) {
+            const listRef = ref(storage, `users/${uid}`);
+            const res = await listAll(listRef);
+            for (const item of res.items) {
+                const url = await getDownloadURL(item);
+                addFileCard(item.name, url);
+            }
+        }
+
+        function addFileCard(name, url) {
             const div = document.createElement('div');
             div.className = 'file-card';
-            div.innerHTML = `<i data-lucide="file-text" style="margin-bottom:10px; color:#666"></i><br>
-                             <span style="font-size:13px; font-weight:bold">${name}</span><br>
-                             <a href="${url}" target="_blank" style="color:var(--pamp-orange); text-decoration:none; font-size:12px;">Ouvrir</a>`;
+            div.innerHTML = `
+                <div class="file-icon"><i data-lucide="file"></i></div>
+                <div style="font-weight:600; font-size:14px; margin-bottom:10px; overflow:hidden; text-overflow:ellipsis;">${name}</div>
+                <a href="${url}" target="_blank" style="color:var(--pamp-orange); text-decoration:none; font-size:13px; font-weight:700;">OUVRIR</a>
+            `;
             document.getElementById('fileGrid').prepend(div);
             lucide.createIcons();
         }
