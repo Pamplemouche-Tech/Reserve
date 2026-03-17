@@ -3,194 +3,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Réserve par Pamplemouche</title>
-    <script src="https://unpkg.com/lucide@latest"></script> <style>
+    <title>Réserve - Pamplemouche</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
         :root {
             --pamp-orange: #FF7F50;
             --pamp-soft: #FFF5F2;
-            --glass: rgba(255, 255, 255, 0.7);
             --text: #1d1d1f;
+            --glass: rgba(255, 255, 255, 0.8);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        
+        body { background: #f5f5f7; color: var(--text); min-height: 100vh; }
 
-        body { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); color: var(--text); height: 100vh; overflow: hidden; display: flex; }
-
-        /* --- SIDEBAR --- */
-        sidebar {
-            width: 260px;
-            background: var(--glass);
-            backdrop-filter: blur(10px);
-            border-right: 1px solid rgba(255,255,255,0.3);
-            padding: 30px 20px;
+        /* --- NAVBAR STYLE GOOGLE --- */
+        .navbar {
+            height: 64px;
+            background: white;
             display: flex;
-            flex-direction: column;
-            gap: 10px;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            border-bottom: 1px solid #e0e0e0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
-        .logo { font-size: 22px; font-weight: 800; color: var(--pamp-orange); margin-bottom: 30px; display: flex; align-items: center; gap: 10px; }
+        .nav-left { display: flex; align-items: center; gap: 20px; }
+        .logo { font-size: 20px; font-weight: bold; color: var(--pamp-orange); text-decoration: none; display: flex; align-items: center; gap: 8px; }
 
-        .nav-item { padding: 12px 15px; border-radius: 12px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 10px; font-weight: 500; color: #555; }
-        .nav-item:hover { background: rgba(255, 127, 80, 0.1); color: var(--pamp-orange); }
-        .active { background: var(--pamp-orange); color: white !important; }
+        .nav-right { display: flex; align-items: center; gap: 15px; }
 
-        /* --- MAIN CONTENT --- */
-        main { flex: 1; padding: 40px; overflow-y: auto; }
-
-        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
-
-        .btn-main { 
-            background: var(--pamp-orange); color: white; border: none; padding: 12px 24px; 
-            border-radius: 20px; font-weight: 600; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(255, 127, 80, 0.3);
+        /* Le menu d'apps type Google */
+        .apps-button { 
+            padding: 8px; border-radius: 50%; cursor: pointer; transition: 0.2s; 
+            display: flex; align-items: center; justify-content: center;
         }
-        .btn-main:hover { transform: scale(1.05); }
+        .apps-button:hover { background: #f0f0f0; }
 
-        /* --- GRID & PROGRESS --- */
-        .file-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
+        /* --- CONTENT --- */
+        main { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
 
-        .file-card { 
-            background: var(--glass); backdrop-filter: blur(5px); padding: 20px; border-radius: 20px; 
-            text-align: center; border: 1px solid rgba(255,255,255,0.5); transition: 0.3s;
-        }
-        .file-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .header-section { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
 
-        .progress-container { margin-top: 20px; background: white; padding: 15px; border-radius: 15px; display: none; }
-        .progress-bar { height: 6px; background: #eee; border-radius: 3px; overflow: hidden; margin-top: 8px; }
-        .progress-fill { height: 100%; background: var(--pamp-orange); width: 0%; transition: 0.2s; }
+        .btn-upload {
+            background: var(--pamp-orange); color: white; border: none; padding: 12px 24px;
+            border-radius: 25px; font-weight: 600; cursor: pointer; transition: 0.3s;
+        }
 
-        /* --- MODAL CONNEXION --- */
-        .modal { 
-            position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(5px); 
-            display: flex; align-items: center; justify-content: center; z-index: 100;
-        }
-        .modal-content { 
-            background: white; padding: 40px; border-radius: 30px; width: 350px; text-align: center; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-        }
-        .modal-content input { 
-            width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; outline: none;
-        }
-        .hidden { display: none; }
+        /* --- GRID --- */
+        .file-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
+        .file-card { background: white; padding: 20px; border-radius: 12px; text-align: center; border: 1px solid #e0e0e0; transition: 0.2s; }
+        .file-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
+        /* --- PROGRESS BAR --- */
+        #progressContainer { display: none; background: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid var(--pamp-orange); }
+        .progress-bar { height: 8px; background: #eee; border-radius: 4px; overflow: hidden; margin-top: 10px; }
+        .progress-fill { height: 100%; background: var(--pamp-orange); width: 0%; transition: 0.3s; }
+
+        /* --- MODAL AUTH --- */
+        .auth-overlay { position: fixed; inset: 0; background: white; z-index: 2000; display: flex; align-items: center; justify-content: center; }
+        .auth-card { width: 100%; max-width: 400px; padding: 40px; text-align: center; }
+        .auth-card input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; }
+        .auth-card button { width: 100%; padding: 12px; background: var(--pamp-orange); color: white; border: none; border-radius: 8px; margin-top: 10px; cursor: pointer; font-weight: bold; }
+        
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <sidebar>
-        <div class="logo"><span>🍊</span> Pamplemouche</div>
-        <div class="nav-item active"><i data-lucide="folder"></i> Réserve</div>
-        <div class="nav-item"><i data-lucide="search"></i> Zeste</div>
-        <div class="nav-item"><i data-lucide="message-circle"></i> Pépins</div>
-        <div style="margin-top: auto;" class="nav-item" id="btnLogout"><i data-lucide="log-out"></i> Déconnexion</div>
-    </sidebar>
+    <div id="authScreen" class="auth-overlay">
+        <div class="auth-card">
+            <h1 style="color: var(--pamp-orange); margin-bottom: 10px;">🍊 Pamplemouche ID</h1>
+            <p id="authTitle">Connectez-vous pour accéder à Réserve</p>
+            <input type="email" id="email" placeholder="Email">
+            <input type="password" id="password" placeholder="Mot de passe">
+            <button id="btnPrimary">Se connecter</button>
+            <p id="toggleAuth" style="margin-top: 20px; font-size: 14px; color: #666; cursor: pointer;">Pas de compte ? Créer un identifiant</p>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="#" class="logo"><span>🍊</span> Pamplemouche</a>
+        </div>
+        <div class="nav-right">
+            <div class="apps-button" title="Applications Pamplemouche"><i data-lucide="layout-grid"></i></div>
+            <div id="userEmail" style="font-size: 14px; font-weight: 500;"></div>
+            <button id="btnLogout" style="background: none; border: none; cursor: pointer;"><i data-lucide="log-out"></i></button>
+        </div>
+    </nav>
 
     <main>
-        <header>
-            <h1>Ma Réserve</h1>
-            <div style="display: flex; gap: 15px;">
-                <button class="btn-main" onclick="document.getElementById('fileInput').click()">+ Téléverser</button>
-                <input type="file" id="fileInput" class="hidden">
-            </div>
-        </header>
+        <div id="progressContainer">
+            <span id="fileName">Téléchargement...</span>
+            <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
+        </div>
 
-        <div id="uploadStatus" class="progress-container">
-            <span id="fileNameDisplay" style="font-size: 12px; font-weight: bold;">Fichier en cours...</span>
-            <div class="progress-bar"><div id="fill" class="progress-fill"></div></div>
+        <div class="header-section">
+            <h2>Ma Réserve</h2>
+            <button class="btn-upload" onclick="document.getElementById('fileInput').click()">+ Nouveau</button>
+            <input type="file" id="fileInput" class="hidden">
         </div>
 
         <div class="file-grid" id="fileGrid">
             </div>
     </main>
 
-    <div id="authModal" class="modal">
-        <div class="modal-content">
-            <h2 style="margin-bottom: 20px;">Pamplemouche ID</h2>
-            <input type="email" id="email" placeholder="Email">
-            <input type="password" id="password" placeholder="Mot de passe">
-            <button class="btn-main" style="width: 100%; margin-top: 15px;" id="btnLoginAction">Se connecter</button>
-            <p style="margin-top: 15px; font-size: 13px; color: #666; cursor: pointer;" id="toggleAuth">Pas de compte ? Créer un Pépins ID</p>
-        </div>
-    </div>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
+        // Ta config
         const firebaseConfig = {
             apiKey: "AIzaSyAMTNzDvix3Q4WSrqETufyEfTTjzU5sHGo",
             authDomain: "pamplemouche-ecosyst.firebaseapp.com",
             projectId: "pamplemouche-ecosyst",
             storageBucket: "pamplemouche-ecosyst.firebasestorage.app",
             messagingSenderId: "1040995549075",
-            appId: "1:1040995549075:web:f9958aff37f4168b46b266"
+            appId: "1:1040995549075:web:f9958aff37f4168b46b266",
+            measurementId: "G-4RD5CMKDHP"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const storage = getStorage(app);
 
-        // --- AUTHENTIFICATION ---
-        const authModal = document.getElementById('authModal');
+        let isLoginMode = true;
+
+        // --- AUTH LOGIQUE ---
+        const authScreen = document.getElementById('authScreen');
+        const btnPrimary = document.getElementById('btnPrimary');
+        const toggleAuth = document.getElementById('toggleAuth');
+
+        toggleAuth.onclick = () => {
+            isLoginMode = !isLoginMode;
+            btnPrimary.innerText = isLoginMode ? "Se connecter" : "Créer mon compte";
+            document.getElementById('authTitle').innerText = isLoginMode ? "Connectez-vous pour accéder à Réserve" : "Créez votre Pamplemouche ID";
+            toggleAuth.innerText = isLoginMode ? "Pas de compte ? Créer un identifiant" : "Déjà un compte ? Se connecter";
+        };
+
+        btnPrimary.onclick = () => {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('password').value;
+            if (isLoginMode) {
+                signInWithEmailAndPassword(auth, email, pass).catch(err => alert(err.message));
+            } else {
+                createUserWithEmailAndPassword(auth, email, pass).then(() => alert("Compte créé !")).catch(err => alert(err.message));
+            }
+        };
+
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                authModal.classList.add('hidden');
+                authScreen.classList.add('hidden');
+                document.getElementById('userEmail').innerText = user.email;
             } else {
-                authModal.classList.remove('hidden');
+                authScreen.classList.remove('hidden');
             }
         });
 
-        document.getElementById('btnLoginAction').addEventListener('click', () => {
-            const email = document.getElementById('email').value;
-            const pass = document.getElementById('password').value;
-            signInWithEmailAndPassword(auth, email, pass).catch(err => alert(err.message));
-        });
+        document.getElementById('btnLogout').onclick = () => signOut(auth);
 
-        document.getElementById('btnLogout').addEventListener('click', () => signOut(auth));
-
-        // --- UPLOAD ET BARRE DE PROGRESSION ---
+        // --- STORAGE LOGIQUE ---
         const fileInput = document.getElementById('fileInput');
-        const uploadStatus = document.getElementById('uploadStatus');
-        const fill = document.getElementById('fill');
-        const fileGrid = document.getElementById('fileGrid');
-
-        fileInput.addEventListener('change', (e) => {
+        fileInput.onchange = (e) => {
             const file = e.target.files[0];
-            if(!file) return;
+            if (!file) return;
 
-            const storageRef = ref(storage, 'reserves/' + file.name);
-            const uploadTask = uploadBytesResumable(storageRef, file);
+            const sRef = ref(storage, `users/${auth.currentUser.uid}/${file.name}`);
+            const uploadTask = uploadBytesResumable(sRef, file);
 
-            uploadStatus.style.display = 'block';
-            document.getElementById('fileNameDisplay').innerText = file.name;
+            document.getElementById('progressContainer').style.display = 'block';
+            document.getElementById('fileName').innerText = file.name;
 
             uploadTask.on('state_changed', 
                 (snap) => {
-                    const progress = (snap.bytesTransferred / snap.totalBytes) * 100;
-                    fill.style.width = progress + '%';
+                    const p = (snap.bytesTransferred / snap.totalBytes) * 100;
+                    document.getElementById('progressFill').style.width = p + '%';
                 },
-                (err) => alert("Erreur d'upload"),
+                (err) => alert(err.message),
                 () => {
-                    getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-                        createFileCard(file.name, url);
-                        uploadStatus.style.display = 'none';
-                        fill.style.width = '0%';
+                    getDownloadURL(uploadTask.snapshot.ref).then(url => {
+                        addFileToUI(file.name, url);
+                        document.getElementById('progressContainer').style.display = 'none';
                     });
                 }
             );
-        });
+        };
 
-        function createFileCard(name, url) {
-            const card = document.createElement('div');
-            card.className = 'file-card';
-            card.innerHTML = `
-                <div style="font-size: 40px; margin-bottom: 10px;">📄</div>
-                <div style="font-size: 14px; font-weight: 600; word-break: break-all;">${name}</div>
-                <a href="${url}" target="_blank" style="color: var(--pamp-orange); font-size: 12px; text-decoration: none; margin-top: 10px; display: block;">Ouvrir</a>
-            `;
-            fileGrid.prepend(card);
+        function addFileToUI(name, url) {
+            const div = document.createElement('div');
+            div.className = 'file-card';
+            div.innerHTML = `<i data-lucide="file-text" style="margin-bottom:10px; color:#666"></i><br>
+                             <span style="font-size:13px; font-weight:bold">${name}</span><br>
+                             <a href="${url}" target="_blank" style="color:var(--pamp-orange); text-decoration:none; font-size:12px;">Ouvrir</a>`;
+            document.getElementById('fileGrid').prepend(div);
+            lucide.createIcons();
         }
 
-        lucide.createIcons(); // Initialise les icônes Lucide
+        lucide.createIcons();
     </script>
 </body>
 </html>
